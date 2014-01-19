@@ -8,6 +8,7 @@
   Established in <%= @brewery.year %>
 </p>
 
+<strong>Total beers: <%= @brewery.beers.count %></strong>
 <p>
  <% @brewery.beers.each do |beer| %>
    <%= link_to beer.name, beer %><br />
