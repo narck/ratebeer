@@ -12,7 +12,7 @@
 
 <p>
   <strong>Brewery:</strong>
-  	<% brewery = Brewery.find(params[:id]) %>
+  	<% brewery = Brewery.find_by :id=>@beer.brewery_id %>
     <%= link_to brewery.name, brewery %>
   	
   
