@@ -14,7 +14,14 @@
   <strong>Brewery:</strong>
   	<% brewery = Brewery.find_by :id=>@beer.brewery_id %>
     <%= link_to brewery.name, brewery %>
-  	
+<br />
+<% if @beer.ratings.empty? %>
+ beer has not yet been rated! <%= link_to "add a rating?", new_rating_path %>
+
+<% else %>
+<% c = @beer.ratings.count%>
+ Has <%= c %> <%= "rating".pluralize(c) %>, average <%= @beer.average_rating %>
+<% end %>  	
   
 </p>
 
