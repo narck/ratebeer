@@ -2,8 +2,10 @@ class Beer < ActiveRecord::Base
 	include RatingAverage
 
 	belongs_to :brewery
-	has_many :ratings
-
+	has_many :ratings, dependent: :destroy
+	
+  	has_many :raters, -> { uniq }, through: :ratings, source: :user
+	validates :name, presence: true
 
 	def average_rating
 		ratings = self.ratings.select(:score)
@@ -12,8 +14,7 @@ class Beer < ActiveRecord::Base
 	end
 
 	def to_s
-		
-		return self.name + ', ' + brewery.to_s
+		return "#{name} #{brewery.to_s}"
 	end
 
 end
