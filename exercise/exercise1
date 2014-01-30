@@ -1,0 +1,112 @@
+ rails c
+Loading development environment (Rails 4.0.2)
+
+2.0.0-p353 :002 > b1 = Brewery.new name:"BrewDog", year:2007
+ => #<Brewery id: nil, name: "BrewDog", year: 2007, created_at: nil, updated_at: nil>
+2.0.0-p353 :003 > b1.save
+   (0.2ms)  begin transaction
+  SQL (92.7ms)  INSERT INTO "breweries" ("created_at", "name", "updated_at", "year") VALUES (?, ?, ?, ?)  [["created_at", Mon, 20 Jan 2014 14:53:38 UTC +00:00], ["name", "BrewDog"], ["updated_at", Mon, 20 Jan 2014 14:53:38 UTC +00:00], ["year", 2007]]
+   (3.4ms)  commit transaction
+ => true
+2.0.0-p353 :004 > be = Beer.new
+Beer.new
+2.0.0-p353 :004 > be = Beer.new name:"" brewery_^C
+
+*CUT*
+
+2.0.0-p353 :004 > b1.beers
+  Beer Load (0.2ms)  SELECT "beers".* FROM "beers" WHERE "beers"."brewery_id" = ?  [["brewery_id", 4]]
+ => #<ActiveRecord::Associations::CollectionProxy []>
+2.0.0-p353 :005 > b1
+ => #<Brewery id: 4, name: "BrewDog", year: 2007, created_at: "2014-01-20 14:53:38", updated_at: "2014-01-20 14:53:38">
+
+*CUT*
+
+2.0.0-p353 :007 > p =  Beer.new name:"Punk IPA", style:"IPA"
+ => #<Beer id: nil, name: "Punk IPA", style: "IPA", brewery_id: nil, created_at: nil, updated_at: nil>
+2.0.0-p353 :008 > b1.beers << p
+   (0.2ms)  begin transaction
+  SQL (0.7ms)  INSERT INTO "beers" ("brewery_id", "created_at", "name", "style", "updated_at") VALUES (?, ?, ?, ?, ?)  [["brewery_id", 4], ["created_at", Mon, 20 Jan 2014 14:57:22 UTC +00:00], ["name", "Punk IPA"], ["style", "IPA"], ["updated_at", Mon, 20 Jan 2014 14:57:22 UTC +00:00]]
+   (2.8ms)  commit transaction
+ => #<ActiveRecord::Associations::CollectionProxy [#<Beer id: 8, name: "Punk IPA", style: "IPA", brewery_id: 4, created_at: "2014-01-20 14:57:22", updated_at: "2014-01-20 14:57:22">]>
+
+*CUT*
+
+**CUT FROM OTHER SESSION**
+2.0.0-p353 :017 > p.ratings.create score:5
+   (0.1ms)  begin transaction
+  SQL (2.4ms)  INSERT INTO "ratings" ("beer_id", "created_at", "score", "updated_at") VALUES (?, ?, ?, ?)  [["beer_id", 8], ["created_at", Wed, 22 Jan 2014 18:28:15 UTC +00:00], ["score", 5], ["updated_at", Wed, 22 Jan 2014 18:28:15 UTC +00:00]]
+   (337.2ms)  commit transaction
+ => #<Rating id: 19, score: 5, beer_id: 8, created_at: "2014-01-22 18:28:15", updated_at: "2014-01-22 18:28:15">
+2.0.0-p353 :018 > p.ratings.create score:6
+   (0.2ms)  begin transaction
+  SQL (0.6ms)  INSERT INTO "ratings" ("beer_id", "created_at", "score", "updated_at") VALUES (?, ?, ?, ?)  [["beer_id", 8], ["created_at", Wed, 22 Jan 2014 18:28:17 UTC +00:00], ["score", 6], ["updated_at", Wed, 22 Jan 2014 18:28:17 UTC +00:00]]
+   (53.3ms)  commit transaction
+ => #<Rating id: 20, score: 6, beer_id: 8, created_at: "2014-01-22 18:28:17", updated_at: "2014-01-22 18:28:17">
+2.0.0-p353 :019 >
+**END CUT FROM OTHER SESSION**
+
+
+2.0.0-p353 :013 > Beer.find
+Beer.find                          Beer.find_in_batches
+Beer.find_by                       Beer.find_or_create_by
+Beer.find_by!                      Beer.find_or_create_by!
+Beer.find_by_sql                   Beer.find_or_initialize_by
+Beer.find_each                     Beer.finder_needs_type_condition?
+
+*CUT*
+
+2.0.0-p353 :014 > Beer.find_by name:"Punk IPA"
+  Beer Load (0.3ms)  SELECT "beers".* FROM "beers" WHERE "beers"."name" = 'Punk IPA' LIMIT 1
+ => #<Beer id: 8, name: "Punk IPA", style: "IPA", brewery_id: 4, created_at: "2014-01-20 14:57:22", updated_at: "2014-01-20 14:57:22">
+2.0.0-p353 :015 > ps = Beer.new name:"Nanny State", style:"low alcohol"
+ => #<Beer id: nil, name: "Nanny State", style: "low alcohol", brewery_id: nil, created_at: nil, updated_at: nil>
+2.0.0-p353 :016 > b1.beers << ps
+   (0.2ms)  begin transaction
+  SQL (0.6ms)  INSERT INTO "beers" ("brewery_id", "created_at", "name", "style", "updated_at") VALUES (?, ?, ?, ?, ?)  [["brewery_id", 4], ["created_at", Mon, 20 Jan 2014 15:03:19 UTC +00:00], ["name", "Nanny State"], ["style", "low alcohol"], ["updated_at", Mon, 20 Jan 2014 15:03:19 UTC +00:00]]
+   (2.5ms)  commit transaction
+ => #<ActiveRecord::Associations::CollectionProxy [#<Beer id: 8, name: "Punk IPA", style: "IPA", brewery_id: 4, created_at: "2014-01-20 14:57:22", updated_at: "2014-01-20 14:57:22">, #<Beer id: 9, name: "Nanny State", style: "low alcohol", brewery_id: 4, created_at: "2014-01-20 15:03:19", updated_at: "2014-01-20 15:03:19">]>
+
+*CUT*
+
+2.0.0-p353 :018 > ps.ratings.cre
+ps.ratings.create                       ps.ratings.create_savepoint
+ps.ratings.create!                      ps.ratings.create_string_join
+ps.ratings.create_aggregate             ps.ratings.create_table
+ps.ratings.create_aggregate_handler     ps.ratings.create_table_alias
+ps.ratings.create_and                   ps.ratings.create_true
+ps.ratings.create_body                  ps.ratings.create_values
+ps.ratings.create_brewery               ps.ratings.create_with
+ps.ratings.create_brewery!              ps.ratings.create_with!
+ps.ratings.create_ext                   ps.ratings.create_with_value
+ps.ratings.create_ext_from_array        ps.ratings.create_with_value=
+ps.ratings.create_ext_from_hash         ps.ratings.created_at
+ps.ratings.create_ext_from_string       ps.ratings.created_at=
+ps.ratings.create_extension             ps.ratings.created_at?
+ps.ratings.create_false                 ps.ratings.created_at_before_type_cast
+ps.ratings.create_function              ps.ratings.created_at_change
+ps.ratings.create_insert                ps.ratings.created_at_changed?
+ps.ratings.create_join                  ps.ratings.created_at_was
+ps.ratings.create_join_table            ps.ratings.created_at_will_change!
+ps.ratings.create_on                    ps.ratings.credentials_path
+ps.ratings.create_reflection
+2.0.0-p353 :018 > ps.ratings.create score:10
+   (0.1ms)  begin transaction
+  SQL (0.5ms)  INSERT INTO "ratings" ("beer_id", "created_at", "score", "updated_at") VALUES (?, ?, ?, ?)  [["beer_id", 9], ["created_at", Mon, 20 Jan 2014 15:04:24 UTC +00:00], ["score", 10], ["updated_at", Mon, 20 Jan 2014 15:04:24 UTC +00:00]]
+   (47.2ms)  commit transaction
+ => #<Rating id: 1, score: 10, beer_id: 9, created_at: "2014-01-20 15:04:24", updated_at: "2014-01-20 15:04:24">
+2.0.0-p353 :019 > ps.ratings.create score:12
+   (0.1ms)  begin transaction
+  SQL (0.5ms)  INSERT INTO "ratings" ("beer_id", "created_at", "score", "updated_at") VALUES (?, ?, ?, ?)  [["beer_id", 9], ["created_at", Mon, 20 Jan 2014 15:04:34 UTC +00:00], ["score", 12], ["updated_at", Mon, 20 Jan 2014 15:04:34 UTC +00:00]]
+   (50.6ms)  commit transaction
+ => #<Rating id: 2, score: 12, beer_id: 9, created_at: "2014-01-20 15:04:34", updated_at: "2014-01-20 15:04:34">
+2.0.0-p353 :020 > ps.ratings.create score:15
+   (0.1ms)  begin transaction
+  SQL (0.5ms)  INSERT INTO "ratings" ("beer_id", "created_at", "score", "updated_at") VALUES (?, ?, ?, ?)  [["beer_id", 9], ["created_at", Mon, 20 Jan 2014 15:04:36 UTC +00:00], ["score", 15], ["updated_at", Mon, 20 Jan 2014 15:04:36 UTC +00:00]]
+   (54.9ms)  commit transaction
+ => #<Rating id: 3, score: 15, beer_id: 9, created_at: "2014-01-20 15:04:36", updated_at: "2014-01-20 15:04:36">
+2.0.0-p353 :021 > p.ratings.create score:4
+   (0.1ms)  begin transaction
+  SQL (0.7ms)  INSERT INTO "ratings" ("beer_id", "created_at", "score", "updated_at") VALUES (?, ?, ?, ?)  [["beer_id", 8], ["created_at", Mon, 20 Jan 2014 15:04:42 UTC +00:00], ["score", 4], ["updated_at", Mon, 20 Jan 2014 15:04:42 UTC +00:00]]
+   (57.7ms)  commit transaction
+ => #<Rating id: 4, score: 4, beer_id: 8, created_at: "2014-01-20 15:04:42", updated_at: "2014-01-20 15:04:42">
