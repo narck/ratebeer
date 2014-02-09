@@ -4,7 +4,7 @@ rvm:
 deploy:
   provider: heroku
   app: fathomless-anchorage-7867
-  on: narck/ratebeer
+  on: production
   api_key:
     secure: AVJZg/+YZ95/OFyr/nY8ZpBWqJJObYJbmHGzIc8P/gfaVfq5cVYxRQ+GCGVriZgt40EGyt0kJ65rCeGU2VSXgegdykV6sO+/XdEdvOPEd3ZAqi2cO14Gxj1dSun17xLO2p6cnmDxoTIfFuVNnNJdLYtfeF1HSKFhXft5i0CJA7A=
 
