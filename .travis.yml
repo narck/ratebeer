@@ -1,0 +1,16 @@
+language: ruby
+rvm:
+- 2.0.0
+deploy:
+  provider: heroku
+  app: fathomless-anchorage-7867
+  on: narck/ratebeer
+  api_key:
+    secure: AVJZg/+YZ95/OFyr/nY8ZpBWqJJObYJbmHGzIc8P/gfaVfq5cVYxRQ+GCGVriZgt40EGyt0kJ65rCeGU2VSXgegdykV6sO+/XdEdvOPEd3ZAqi2cO14Gxj1dSun17xLO2p6cnmDxoTIfFuVNnNJdLYtfeF1HSKFhXft5i0CJA7A=
+
+  run: "rake db:migrate"
+script:
+- bundle exec rake db:migrate --trace
+- RAILS_ENV=test bundle exec rake db:migrate --trace
+- bundle exec rake db:test:prepare
+- bundle exec rspec -fd spec/
