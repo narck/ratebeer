@@ -3,8 +3,8 @@
 <table>
   <thead>
     <tr>
-      <th>User</th>
       <th>Beer club</th>
+      <th>User</th>
       <th></th>
       <th></th>
       <th></th>
@@ -14,10 +14,8 @@
   <tbody>
     <% @memberships.each do |membership| %>
       <tr>
-        <% user = User.find_by id: membership.user_id%>
-        <% club = BeerClub.find_by id: membership.beer_club_id%>
-        <td><%= user.username %></td>
-        <td><%= club.name %></td>
+        <td><%= membership.beer_club_id %></td>
+        <td><%= membership.user_id %></td>
         <td><%= link_to 'Show', membership %></td>
         <td><%= link_to 'Edit', edit_membership_path(membership) %></td>
         <td><%= link_to 'Destroy', membership, method: :delete, data: { confirm: 'Are you sure?' } %></td>

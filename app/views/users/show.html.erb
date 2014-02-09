@@ -2,6 +2,20 @@
 
 <h2> <%= @user.username %></h2>
 
+
+
+<% if @user.favorite_beer %>
+  <strong>Favorite beer:</strong> <%= @user.favorite_beer.name %><br/><br/>
+<%end%>
+
+<% if @user.favorite_brewery %>
+  <strong>Favorite brewery:</strong> <%= @user.favorite_brewery.name %><br/><br/>
+<%end%>
+
+<% if @user.favorite_style %>
+  <strong>Favorite style:</strong> <%= @user.favorite_style %><br/><br/>
+<%end%>
+
 <% if @user.ratings.empty? %>
     <p>has not yet made ratings</p>
 <% else %>
@@ -11,11 +25,9 @@
 <% if @user.beer_clubs.any? %>
   <p>
   member of
-  <ul>
     <% @user.beer_clubs.each do |club| %>
-      <li><%= link_to club.name, club %></li>
+      <%= link_to club.name, club %>
     <% end %>
-</ul>
   </p>
 <% end %>
 

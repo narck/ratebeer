@@ -1,6 +1,5 @@
 module RatingAverage
-
-def average_rating(list)
-	list.inject(0) { |result, element| result + element }
-end
+  def average_rating
+    ratings.average :score
+  end
 end

@@ -1,12 +1,11 @@
 <h1>Listing beers</h1>
-
+<p id="notice"><%= notice %></p>
 <table>
   <thead>
     <tr>
       <th>Name</th>
       <th>Style</th>
       <th>Brewery</th>
-      <th></th>
       <th></th>
       <th></th>
     </tr>
@@ -17,8 +16,7 @@
       <tr>
         <td><%= link_to beer.name, beer %></td>
         <td><%= beer.style %></td>
-        <td><% brewery = Brewery.find_by :id=>beer.brewery_id %>
-          <%= link_to brewery.name, brewery %></td>
+        <td><%= link_to beer.brewery.name, beer.brewery %></td>
         <td><%= link_to 'Edit', edit_beer_path(beer) %></td>
         <td><%= link_to 'Destroy', beer, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
@@ -28,5 +26,4 @@
 
 <br>
 
-<%= link_to 'New Beer', new_beer_path %><br/>
-<%= link_to 'List of breweries', breweries_path %>
+<%= link_to('New Beer', new_beer_path) if current_user %>

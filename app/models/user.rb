@@ -1,28 +1,37 @@
 class User < ActiveRecord::Base
-	include RatingAverage
+  include RatingAverage
 
-	has_secure_password
-	validates :username, uniqueness: true, 
-							length: { minimum: 3, maximum: 15 }
-	validates :password, :presence => true,
-                   :confirmation => true,
-                   :length => {:minimum => 4}
+  validates :username, uniqueness: true,
+                       length: { in: 3..15 }
 
-    validates :password, :format => {:with => /(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+/, :message => "must contain at least one number and one uppercase letter" }
+  validates :password, length: { minimum: 3 },
+                       format: { with: /.*(\d.*[A-Z]|[A-Z].*\d).*/,
+                                 message: "should contain a uppercase letter and a number" }
 
-	has_many :ratings, :dependent => :destroy
-	has_many :beers, through: :ratings
 
-	has_many :memberships, :dependent => :destroy
-	
+  has_secure_password
+
+  has_many :ratings, dependent: :destroy
+  has_many :beers, through: :ratings
+  has_many :memberships, dependent: :destroy
   has_many :beer_clubs, through: :memberships
 
+   def favorite_beer
+    return nil if ratings.empty?
+    ratings.order(score: :desc).limit(1).first.beer
+  end
 
+  def favorite_brewery
+    breweries = ratings.group_by {|b| b.beer.send(:brewery)}
+    return nil if breweries.empty? # pass nil to avoid breakage
+    breweries.max_by{|b, ratings| ratings.map(&:score).inject(0.0, :+) / ratings.size}.first
 
-	def average_rating
-		ratings = self.ratings.select(:score)
-		ratings.extend RatingAverage
-		return ratings.average_rating(ratings.pluck(:score))
-	end
+  end
 
+  def favorite_style
+    styles = ratings.group_by {|b| b.beer.send(:style)}
+    return nil if styles.empty?
+    styles.max_by{|b, ratings| ratings.map(&:score).inject(0.0, :+) / ratings.size}.first
+
+  end
 end

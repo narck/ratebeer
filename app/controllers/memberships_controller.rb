@@ -1,6 +1,6 @@
 class MembershipsController < ApplicationController
   before_action :set_membership, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate, :only => :destroy
+  before_action :ensure_that_signed_in, except: [:index, :show]
 
   # GET /memberships
   # GET /memberships.json
@@ -13,10 +13,10 @@ class MembershipsController < ApplicationController
   def show
   end
 
-  # GET /memberships/new  
+  # GET /memberships/new
   def new
     @membership = Membership.new
-    @clubs = BeerClub.all
+    @clubs = BeerClub.all.reject{ |b| b.members.include? current_user }
   end
 
   # GET /memberships/1/edit
@@ -26,17 +26,15 @@ class MembershipsController < ApplicationController
   # POST /memberships
   # POST /memberships.json
   def create
-
-    @clubs = BeerClub.all
     @membership = Membership.new(membership_params)
-
-    @membership.user_id = current_user.id
+    @membership.user = current_user
 
     respond_to do |format|
       if @membership.save
         format.html { redirect_to @membership, notice: 'Membership was successfully created.' }
         format.json { render action: 'show', status: :created, location: @membership }
       else
+        @clubs = BeerClub.all.reject{ |b| b.members.include? current_user }
         format.html { render action: 'new' }
         format.json { render json: @membership.errors, status: :unprocessable_entity }
       end
@@ -75,6 +73,6 @@ class MembershipsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def membership_params
-      params.require(:membership).permit(:user_id, :beer_club_id)
+      params.require(:membership).permit(:beer_club_id, :user_id)
     end
 end

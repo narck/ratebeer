@@ -1,17 +1,17 @@
 class BeerClubsController < ApplicationController
   before_action :set_beer_club, only: [:show, :edit, :update, :destroy]
+  before_filter :ensure_that_signed_in, except: [:index, :show]
+  before_filter :admin?, only: [:destroy]
 
   # GET /beer_clubs
   # GET /beer_clubs.json
   def index
     @beer_clubs = BeerClub.all
-
   end
 
   # GET /beer_clubs/1
   # GET /beer_clubs/1.json
   def show
-
   end
 
   # GET /beer_clubs/new

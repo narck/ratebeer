@@ -9,4 +9,4 @@
 
 # Make sure your secret_key_base is kept private
 # if you're sharing your code publicly.
-Ratebeer::Application.config.secret_key_base = '33d2277751336e4a707879bbf88b9076f6d8aa08dfcb427aa81dbcc300af2574c37750a280efe3b119b436815a0c73da7bc4959e974bb9729244cbb1eed9eb9a'
+Ratebeer::Application.config.secret_key_base = '6270bcc59e3c58f483886291f79afa4c66e4b173fa631902fdd73561770d2a4a718b0e5c94c29c845f54392fd72068e244d5b5b54c0a87008df2c04f1c76d390'
