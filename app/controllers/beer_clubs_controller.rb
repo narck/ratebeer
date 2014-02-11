@@ -14,7 +14,7 @@ class BeerClubsController < ApplicationController
   def show
     @membership = Membership.new
     @membership.user_id = session[:user_id]
-    @is_member = User.find_by(:id => session[:user_id]).memberships.pluck(:beer_club_id).include? @beer_club.id
+    @is_member = user_is_member?
   end
 
   # GET /beer_clubs/new
@@ -75,5 +75,12 @@ class BeerClubsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def beer_club_params
       params.require(:beer_club).permit(:name, :founded, :city)
+    end
+
+    def user_is_member?
+      if current_user
+        User.find_by(:id => session[:user_id]).memberships.pluck(:beer_club_id).include? @beer_club.id
+      end
+      
     end
 end
