@@ -1,0 +1,15 @@
+<h1>Listing styles</h1>
+<p id="notice"><%= notice %></p>
+
+
+<% if @styles %>
+<ul>
+<% @styles.each do |style| %>
+	<li><%= link_to style.name, style %></li>
+
+<%end%>
+<%end%>
+
+<br>
+
+<%= link_to('New Beer', new_beer_path) if current_user %>

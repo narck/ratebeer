@@ -74,7 +74,7 @@ end
 
     it "shows user's favorite style correctly" do
       visit user_path(user)
-      expect(page).to have_content("Favorite style: #{b3.style}")
+      expect(page).to have_content("Favorite style: #{b3.style.name}")
     end
 
     it "shows user's favorite brewery correctly" do 

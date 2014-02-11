@@ -12,10 +12,13 @@ class BeersController < ApplicationController
   # GET /beers/1
   # GET /beers/1.json
   def show
+    @rating = Rating.new
+    @rating.beer = @beer
   end
 
   # GET /beers/new
   def new
+    @styles = Style.all
     @beer = Beer.new
   end
 
@@ -26,7 +29,10 @@ class BeersController < ApplicationController
   # POST /beers
   # POST /beers.json
   def create
+    print beer_params
+
     @beer = Beer.new(beer_params)
+
 
     respond_to do |format|
       if @beer.save
@@ -66,7 +72,7 @@ class BeersController < ApplicationController
 
   def set_breweries_and_styles_for_template
     @breweries = Brewery.all
-    @styles = ["Weizen", "Lager", "Pale ale", "IPA", "Porter"]
+    @styles = Style.all
   end
   
   private
@@ -77,6 +83,6 @@ class BeersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def beer_params
-      params.require(:beer).permit(:name, :style, :brewery_id)
+      params.require(:beer).permit(:name, :style_id, :brewery_id)
     end
 end

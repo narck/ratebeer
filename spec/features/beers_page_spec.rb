@@ -8,15 +8,17 @@ describe "Beer" do
       FactoryGirl.create :user
       sign_in(username:"Pekka", password:"Foobar1")
   end
-
+  
   let!(:brewery) {FactoryGirl.create :brewery, name:"Koff"}
-  #let!(:style) {FactoryGirl.create :style, name:"Weizen"}
+  let!(:ses) {FactoryGirl.create(:style2)}
 
   it "with a valid name should be saved" do
-       
+
+    #print ses
+
     visit new_beer_path
     fill_in('beer_name', with: "TopKeKBeer")
-    select('Weizen', from:'beer[style]')
+    select("testikakkonen", :from => "beer[style_id]")
     select('Koff', from:'beer[brewery_id]')
     
       expect{
@@ -25,18 +27,14 @@ describe "Beer" do
     
   end
 
-  it "with invalid name is now saved" do
+  it "with invalid name is not saved" do
     visit new_beer_path
     fill_in('beer_name', with: "")
-    select('Weizen', from:'beer[style]')
+    select('testikakkonen', from:'beer[style_id]')
     select('Koff', from:'beer[brewery_id]')
     
       expect{
         click_button("Create Beer")
       }.not_to change{Beer.count}
   end
-
-
-
-
 end

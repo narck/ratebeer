@@ -12,6 +12,9 @@ class BeerClubsController < ApplicationController
   # GET /beer_clubs/1
   # GET /beer_clubs/1.json
   def show
+    @membership = Membership.new
+    @membership.user_id = session[:user_id]
+    @is_member = User.find_by(:id => session[:user_id]).memberships.pluck(:beer_club_id).include? @beer_club.id
   end
 
   # GET /beer_clubs/new

@@ -125,7 +125,7 @@ describe "with a proper password" do
     end
 
     it "is the only brewery if only one rating" do
-      beer = create_beer_with_rating("1", user)
+      beer = create_beer_with_rating("1", user) 
       brewery = beer.brewery
       expect(user.favorite_brewery).to eq(brewery)
     end
@@ -134,10 +134,11 @@ describe "with a proper password" do
 
       brewery1 = FactoryGirl.create(:brewery)
       brewery2 = FactoryGirl.create(:brewery, :name => "keks")
-  
-      b1 = FactoryGirl.create(:beer, :style => "b1", :brewery => brewery1)
-      b2 = FactoryGirl.create(:beer, :style => "b2", :brewery => brewery2)
-      b3 = FactoryGirl.create(:beer, :style => "b3", :brewery => brewery2)
+      s = FactoryGirl.create(:style)
+
+      b1 = FactoryGirl.create(:beer, :brewery => brewery1)
+      b2 = FactoryGirl.create(:beer, :brewery => brewery2)
+      b3 = FactoryGirl.create(:beer, :brewery => brewery2)
 
 
       FactoryGirl.create(:rating, :score => 5, :beer => b1, :user => user)
@@ -169,10 +170,13 @@ describe "with a proper password" do
     end
 
     it "is the one with highest rating if several rated" do
+      s1 = FactoryGirl.create(:style)
+      s2 = FactoryGirl.create(:style, :name => "olutta")
 
-      b1 = FactoryGirl.create(:beer, :style => "b1")
-      b2 = FactoryGirl.create(:beer, :style => "b2")
-      b3 = FactoryGirl.create(:beer, :style => "b3")
+
+      b1 = FactoryGirl.create(:beer, :style => s1)
+      b2 = FactoryGirl.create(:beer, :style => s1)
+      b3 = FactoryGirl.create(:beer, :style => s2)
 
       FactoryGirl.create(:rating, :score => 5, :beer => b1, :user => user)
       FactoryGirl.create(:rating, :score => 6, :beer => b1, :user => user)

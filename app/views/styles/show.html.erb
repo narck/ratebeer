@@ -1,0 +1,14 @@
+<h1><%= @style.name %></h1>
+<p id="notice"><%= notice %></p>
+<p style="width:50%;margin-left:3%"><%= @style.description %></p>
+
+<% beers = @style.beers%>
+<% if not beers.empty?%>
+<strong>Beers in this style:</strong>
+<ul>
+	<%beers.each do |beer|%>
+	<li> <%= beer %></li>
+	<%end%>
+</ul>
+<%end%>
+<br><br>

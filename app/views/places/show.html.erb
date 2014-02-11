@@ -1,0 +1,8 @@
+<h1><%= @place.send(:name) %></h1>
+<p id="notice"><%= notice %></p>
+
+<%= @place.send "street" %>
+<%= @place.send "zip" %>, <%= @place.send "city" %>
+
+<br><br>
+<iframe frameBorder="0" src="<%= @place.send "blogmap"%>" width="400" height="400"></iframe>

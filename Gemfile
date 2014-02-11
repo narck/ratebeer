@@ -3,7 +3,8 @@ ruby '2.0.0'
 gem 'simplecov', require: false
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.0.2'
-
+gem 'httparty'
+gem "rails-settings-cached", "0.3.1"
 group :development, :test do
   gem 'sqlite3'
 end
@@ -13,6 +14,7 @@ group :development, :test do
 end
 
 group :test do
+  gem 'webmock'
   gem 'factory_girl_rails'
   gem 'capybara'
   gem 'launchy'

@@ -13,7 +13,7 @@
 <%end%>
 
 <% if @user.favorite_style %>
-  <strong>Favorite style:</strong> <%= @user.favorite_style %><br/><br/>
+  <strong>Favorite style:</strong> <%= @user.favorite_style.name %><br/><br/>
 <%end%>
 
 <% if @user.ratings.empty? %>

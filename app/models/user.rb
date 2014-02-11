@@ -20,18 +20,38 @@ class User < ActiveRecord::Base
     return nil if ratings.empty?
     ratings.order(score: :desc).limit(1).first.beer
   end
-
-  def favorite_brewery
-    breweries = ratings.group_by {|b| b.beer.send(:brewery)}
-    return nil if breweries.empty? # pass nil to avoid breakage
-    breweries.max_by{|b, ratings| ratings.map(&:score).inject(0.0, :+) / ratings.size}.first
-
+def rated(category)
+    ratings.map{ |r| r.beer.send(category) }.uniq
   end
 
-  def favorite_style
-    styles = ratings.group_by {|b| b.beer.send(:style)}
-    return nil if styles.empty?
-    styles.max_by{|b, ratings| ratings.map(&:score).inject(0.0, :+) / ratings.size}.first
+  def rating_average(category, item)
+    ratings_of_item = ratings.select{ |r|r.beer.send(category)==item }
+    return 0 if ratings_of_item.empty?
+    ratings_of_item.inject(0.0){ |sum ,r| sum+r.score } / ratings_of_item.count
+  end
 
+   def favorite(category)
+    return nil if ratings.empty?
+    rating_pairs = rated(category).inject([]) do |pairs, item|
+      pairs << [item, rating_average(category, item)]
+    end
+    rating_pairs.sort_by { |s| s.last }.last.first
+  end
+
+  def favorite_brewery
+    favorite :brewery
+  end  
+
+  def favorite_style
+    favorite :style
+  end
+
+  def method_missing(method_name, *args, &block)
+    if method_name =~ /^favorite_/
+      category = method_name[9..-1].to_sym
+      self.favorite category
+    else
+      return super
+    end
   end
 end
