@@ -37,11 +37,11 @@
     <p>none so far</p>
 <% end %>
 
-<ul>
+<ul class="list-group">
   <% @user.ratings.each do |rating| %>
-      <li> <%= rating %>
+      <li class="list-group-item"> <%= rating %>
         <% if @user == current_user %>
-            <%= link_to 'delete', rating, method: :delete, data: { confirm: 'Are you sure?' } %>
+            <%= link_to 'delete', rating, method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-danger' %>
         <% end %>
       </li>
   <% end %>

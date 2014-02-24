@@ -5,8 +5,12 @@ gem 'simplecov', require: false
 gem 'rails', '4.0.2'
 gem 'httparty'
 gem "rails-settings-cached", "0.3.1"
+gem 'jquery-turbolinks'
+gem 'bootstrap-sass'
+
 group :development, :test do
   gem 'sqlite3'
+  gem 'rails_layout'
 end
 
 group :development, :test do
@@ -14,6 +18,8 @@ group :development, :test do
 end
 
 group :test do
+  gem 'database_cleaner', '< 1.1.0'
+  gem 'selenium-webdriver'
   gem 'webmock'
   gem 'factory_girl_rails'
   gem 'capybara'

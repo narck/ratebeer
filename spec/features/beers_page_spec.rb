@@ -13,9 +13,6 @@ describe "Beer" do
   let!(:ses) {FactoryGirl.create(:style2)}
 
   it "with a valid name should be saved" do
-
-    #print ses
-
     visit new_beer_path
     fill_in('beer_name', with: "TopKeKBeer")
     select("testikakkonen", :from => "beer[style_id]")
